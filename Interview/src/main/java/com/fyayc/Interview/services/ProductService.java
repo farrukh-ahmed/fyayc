@@ -10,4 +10,6 @@ public interface ProductService {
     ProductDto addProduct(ProductEntity productEntity);
     ProductDto updateProduct(ProductEntity productEntity);
     List<ProductDto> getAllProducts();
+    List<ProductEntity> getAllProductsByUser(long userId);
+    List<ProductEntity> getAllProductsByPriceAndUser(Integer startPrice,Integer endPrice,Integer userId);
 }

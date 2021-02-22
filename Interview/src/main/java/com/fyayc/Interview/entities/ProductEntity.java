@@ -23,6 +23,17 @@ public class ProductEntity {
     @Column(name = "code",updatable = false)
     private String code;
 
+    @Column(name = "price")
+    private Float price;
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
+    }
+
     @ManyToMany(mappedBy = "products")
     @JsonIgnore
     private List<UserEntity> users;

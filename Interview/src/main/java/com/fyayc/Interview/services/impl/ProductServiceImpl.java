@@ -4,7 +4,6 @@ import com.fyayc.Interview.dto.ProductDto;
 import com.fyayc.Interview.entities.ProductEntity;
 import com.fyayc.Interview.exceptions.ProductCodeIsNotUniqueException;
 import com.fyayc.Interview.mapping.MappingContext;
-import com.fyayc.Interview.mapping.ProductMapper;
 import com.fyayc.Interview.mapping.UserMapper;
 import com.fyayc.Interview.repositories.ProductRepository;
 import com.fyayc.Interview.services.ProductService;
@@ -40,6 +39,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getAllProducts() {
         return productMapper.toProductDtos(productRepository.findAll());
+    }
+
+    @Override
+    public List<ProductEntity> getAllProductsByUser(long userId) {
+        return null;
+    }
+
+    @Override
+    public List<ProductEntity> getAllProductsByPriceAndUser(Integer startPrice, Integer endPrice,Integer userId) {
+        return userId == null ?
+                productRepository.findByPriceBetween(startPrice.floatValue(),endPrice.floatValue())
+                :productRepository.findByUsersIdAndPriceBetween(userId,startPrice.floatValue(),endPrice.floatValue());
     }
 
 

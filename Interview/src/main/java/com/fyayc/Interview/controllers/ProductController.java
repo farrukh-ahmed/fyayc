@@ -3,8 +3,8 @@ package com.fyayc.Interview.controllers;
 import com.fyayc.Interview.common.Meta;
 import com.fyayc.Interview.common.Response;
 import com.fyayc.Interview.dto.ProductDto;
+import com.fyayc.Interview.entities.ProductEntity;
 import com.fyayc.Interview.mapping.MappingContext;
-import com.fyayc.Interview.mapping.ProductMapper;
 import com.fyayc.Interview.mapping.UserMapper;
 import com.fyayc.Interview.services.ProductService;
 import org.mapstruct.factory.Mappers;
@@ -58,4 +58,15 @@ public class ProductController {
         return new ResponseEntity<>(new Response<>(productService.getAllProducts(),
                 new Meta("Product list fetched successfully.",HttpStatus.OK.value())), HttpStatus.OK);
     }
+
+    @GetMapping("/listByPrice")
+    public ResponseEntity<Response<List<ProductEntity>>> findProductsByPriceRangeAndUser(@RequestParam Integer startPrice,
+                                                                                  @RequestParam Integer endPrice,
+                                                                                  @RequestParam(required = false) Integer userId){
+        return new ResponseEntity<>(new Response<>(productService.getAllProductsByPriceAndUser(startPrice,endPrice,userId),
+                new Meta("Product list fetched successfully.",HttpStatus.OK.value())), HttpStatus.OK);
+    }
+
+
+
 }

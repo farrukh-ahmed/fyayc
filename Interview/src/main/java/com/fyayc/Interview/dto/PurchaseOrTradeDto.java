@@ -2,7 +2,7 @@ package com.fyayc.Interview.dto;
 
 public class PurchaseOrTradeDto {
 
-    private Boolean isPurchased;
+    private boolean isPurchased;
 
     private Integer primaryUserId;
 
@@ -12,11 +12,11 @@ public class PurchaseOrTradeDto {
 
     private Integer secondaryProductId;
 
-    public Boolean getPurchased() {
+    public boolean getIsPurchased() {
         return isPurchased;
     }
 
-    public void setPurchased(Boolean purchased) {
+    public void setIsPurchased(boolean purchased) {
         isPurchased = purchased;
     }
 

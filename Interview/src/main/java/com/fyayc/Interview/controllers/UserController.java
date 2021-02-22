@@ -3,7 +3,7 @@ package com.fyayc.Interview.controllers;
 import com.fyayc.Interview.common.Meta;
 import com.fyayc.Interview.common.Response;
 import com.fyayc.Interview.dto.PurchaseOrTradeDto;
-import com.fyayc.Interview.dto.UserDto;
+import com.fyayc.Interview.entities.ProductEntity;
 import com.fyayc.Interview.entities.UserEntity;
 import com.fyayc.Interview.mapping.MappingContext;
 import com.fyayc.Interview.mapping.UserMapper;
@@ -48,16 +48,23 @@ public class UserController {
                         new Meta("All users fetched from the system.",HttpStatus.OK.value())),HttpStatus.OK);
     }
 
-    public ResponseEntity<Response<UserEntity>> getUserById(@PathVariable Integer userId){
-        return new ResponseEntity<>(new Response<>(userService.addUser(user),
-                new Meta("User has been updated to the system successfully.",HttpStatus.OK.value())),HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<UserEntity>> getUserById(@PathVariable Integer id){
+        return new ResponseEntity<>(new Response<>(userService.findUserById(id),
+                new Meta("User with give id fetched successfully.",HttpStatus.OK.value())),HttpStatus.OK);
     }
 
-    public ResponseEntity<Response<UserEntity>> addProductsInTheCart(@Valid @RequestBody UserDto userDto){
-        return null;
-    }
     @PutMapping("/purchaseOrTrade")
-    public ResponseEntity<Response<UserEntity>> purchaseOrTradeProduct(@RequestBody PurchaseOrTradeDto purchaseOrTradeDto){
-        return null;
+    public ResponseEntity<Response<List<UserEntity>>> purchaseOrTradeProduct(@RequestBody PurchaseOrTradeDto purchaseOrTradeDto){
+        return new ResponseEntity<>(
+                new Response<>(
+                        userService.purchaseOrTrade(purchaseOrTradeDto),
+                        new Meta("Purchasing or trading of product/products done successfully.",HttpStatus.OK.value())),HttpStatus.OK);
+    }
+    @GetMapping("/list/{id}")
+    public ResponseEntity<Response<List<ProductEntity>>> getUserProductList(@PathVariable Integer id){
+        return new ResponseEntity<>(
+                new Response<>(userService.getUserProducts(id),
+                        new Meta("All product of user fetched from the system.",HttpStatus.OK.value())),HttpStatus.OK);
     }
 }

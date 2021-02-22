@@ -1,5 +1,6 @@
 package com.fyayc.Interview.common;
 
+import com.fyayc.Interview.exceptions.InvalidProductIdException;
 import com.fyayc.Interview.exceptions.InvalidUserIdException;
 import com.fyayc.Interview.exceptions.ProductCodeIsNotUniqueException;
 import org.springframework.http.HttpStatus;
@@ -55,5 +56,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 new Response<>("Product Code must be unique.",
                         new Meta("Product Code must be unique.",HttpStatus.BAD_REQUEST.value())),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidProductIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response<?>> handleInvalidProductIdException(RuntimeException ex, WebRequest request){
+        return new ResponseEntity<>(
+                new Response<>("Product Id is invalid.",
+                        new Meta("Product Id is invalid.",HttpStatus.BAD_REQUEST.value())),HttpStatus.BAD_REQUEST);
     }
 }

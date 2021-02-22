@@ -1,15 +1,13 @@
 package com.fyayc.Interview.services.impl;
 
 import com.fyayc.Interview.dto.PurchaseOrTradeDto;
-import com.fyayc.Interview.dto.UserDto;
 import com.fyayc.Interview.entities.ProductEntity;
 import com.fyayc.Interview.entities.UserEntity;
+import com.fyayc.Interview.exceptions.InvalidProductIdException;
 import com.fyayc.Interview.exceptions.InvalidUserIdException;
 import com.fyayc.Interview.mapping.MappingContext;
-import com.fyayc.Interview.mapping.UserMapper;
 import com.fyayc.Interview.repositories.UserRepository;
 import com.fyayc.Interview.services.UserService;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +21,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
     @Autowired
     MappingContext mappingContext;
-
 
     @Override
     public UserEntity addUser(UserEntity user) {
@@ -59,6 +54,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> users = userRepository.findUserEntitiesByIdIn(
                 Arrays.asList(purchaseOrTradeDto.getPrimaryUserId(),purchaseOrTradeDto.getSecondaryUserId()));
 
+        if(users.size()!=2) throw new InvalidUserIdException();
         UserEntity primaryUser = users
                 .stream()
                 .filter(u->u.getId() == purchaseOrTradeDto.getPrimaryUserId())
@@ -70,19 +66,23 @@ public class UserServiceImpl implements UserService {
         ProductEntity secondaryProduct = secondaryUser.getProducts()
                 .stream()
                 .filter(p->p.getId()==purchaseOrTradeDto.getSecondaryProductId())
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(()->  new InvalidProductIdException());
 
-        if(purchaseOrTradeDto.getPurchased()){
+
+        if(purchaseOrTradeDto.getIsPurchased()){
 
             secondaryUser.getProducts().remove(secondaryProduct);
             primaryUser.getProducts().add(secondaryProduct);
 
 
         }else{
-            ProductEntity primaryProduct = secondaryUser.getProducts()
+            ProductEntity primaryProduct = primaryUser.getProducts()
                     .stream()
                     .filter(p->p.getId()==purchaseOrTradeDto.getPrimaryProductId())
-                    .findFirst().get();
+                    .findFirst()
+                    .orElseThrow(()->  new InvalidProductIdException());
+
             primaryUser.getProducts().remove(primaryProduct);
             primaryUser.getProducts().add(secondaryProduct);
             secondaryUser.getProducts().remove(secondaryProduct);
@@ -94,12 +94,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> updateUsers(List<UserEntity> users) {
+
         return userRepository.saveAll(users);
     }
 
     @Override
     public UserEntity findUserById(Integer id) {
         Optional<UserEntity> userEntity = userRepository.findById(id);
-        return userEntity.get() !=null? userEntity.get() : throw new InvalidUserIdException();
+        if(userEntity.isPresent()) return userEntity.get();
+        else throw new InvalidUserIdException();
+    }
+
+    @Override
+    public List<ProductEntity> getUserProducts(Integer id) {
+        return findUserById(id).getProducts();
+    }
+
+    @Override
+    public List<ProductEntity> getUserProductsByPrice(Integer userId, Integer startPrice, Integer endPrice) {
+        return null;
     }
 }
