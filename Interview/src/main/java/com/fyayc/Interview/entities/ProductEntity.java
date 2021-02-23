@@ -3,6 +3,8 @@ package com.fyayc.Interview.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Table(name = "product")
@@ -15,15 +17,18 @@ public class ProductEntity {
     private Integer Id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name cannot be empty or null.")
     private String name;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "code",updatable = false)
+    @NotBlank(message = "Product Code cannot be empty or null.")
     private String code;
 
     @Column(name = "price")
+    @NotNull(message = "Product Price cannot be empty or null.")
     private Float price;
 
     public Float getPrice() {

@@ -5,10 +5,7 @@ import com.fyayc.Interview.common.Response;
 import com.fyayc.Interview.dto.PurchaseOrTradeDto;
 import com.fyayc.Interview.entities.ProductEntity;
 import com.fyayc.Interview.entities.UserEntity;
-import com.fyayc.Interview.mapping.MappingContext;
-import com.fyayc.Interview.mapping.UserMapper;
 import com.fyayc.Interview.services.UserService;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +20,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    @Autowired
-    MappingContext mappingContext;
 
     @PostMapping("/")
     public ResponseEntity<Response<UserEntity>> add(@Valid @RequestBody UserEntity user){

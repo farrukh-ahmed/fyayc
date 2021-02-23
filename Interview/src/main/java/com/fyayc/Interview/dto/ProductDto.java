@@ -1,7 +1,6 @@
 package com.fyayc.Interview.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.catalina.User;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;

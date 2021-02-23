@@ -1,10 +1,10 @@
 package com.fyayc.Interview.entities;
 
 
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +18,7 @@ public class UserEntity {
     private Integer id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name cannot be empty or null.")
     private String name;
 
 

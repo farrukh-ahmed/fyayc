@@ -1,5 +1,6 @@
 package com.fyayc.Interview.common;
 
+import com.fyayc.Interview.exceptions.InvalidProductCodeException;
 import com.fyayc.Interview.exceptions.InvalidProductIdException;
 import com.fyayc.Interview.exceptions.InvalidUserIdException;
 import com.fyayc.Interview.exceptions.ProductCodeIsNotUniqueException;
@@ -65,4 +66,13 @@ public class GlobalExceptionHandler {
                 new Response<>("Product Id is invalid.",
                         new Meta("Product Id is invalid.",HttpStatus.BAD_REQUEST.value())),HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(InvalidProductCodeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<Response<?>> handleInvalidProductCodeException(RuntimeException ex, WebRequest request){
+        return new ResponseEntity<>(
+                new Response<>("Product Code is invalid.",
+                        new Meta("Product Code is invalid.",HttpStatus.BAD_REQUEST.value())),HttpStatus.BAD_REQUEST);
+    }
+
+
 }

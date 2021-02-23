@@ -21,8 +21,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    MappingContext mappingContext;
 
     @Override
     public UserEntity addUser(UserEntity user) {
@@ -34,7 +32,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity updateUser(UserEntity user) {
         if (user.getUserId() == null|| user.getId() == null) throw new InvalidUserIdException();
-        else return userRepository.save(user);
+        else{
+            UserEntity existingUser = findUserById(user.getId());
+            if(existingUser.getUserId().equals(user.getUserId())){
+                return userRepository.save(user);
+            }else throw new InvalidUserIdException();
+        }
     }
 
     @Override
@@ -71,10 +74,8 @@ public class UserServiceImpl implements UserService {
 
 
         if(purchaseOrTradeDto.getIsPurchased()){
-
             secondaryUser.getProducts().remove(secondaryProduct);
             primaryUser.getProducts().add(secondaryProduct);
-
 
         }else{
             ProductEntity primaryProduct = primaryUser.getProducts()
